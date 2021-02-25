@@ -1,0 +1,37 @@
+name: Ruby CI
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby_version: [2.6.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby_version }}
+    - name: Install bundler
+      run: gem install bundler -v 2.2.6
+    - name: Install dependencies with bundler
+      run: bundle install
+    - name: Run tests
+      run: bundle exec rspec
+    - name: Install kubectl
+      uses: yokawasa/action-setup-kube-tools@v0.3.0
+      with:
+        kubectl: '1.20.0'
+      id: setup
+    - name: Install skaffold
+      uses: daisaru11/setup-cd-tools@v1
+      with:
+        skaffold: '1.20.0'
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+    - name: Run skaffold build
+      run: |
+        skaffold build
