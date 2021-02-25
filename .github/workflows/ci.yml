@@ -9,10 +9,12 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
-      - name: Install kubectl and skaffold
+      - name: Install kubectl
         uses: yokawasa/action-setup-kube-tools@v0.3.0
         with:
-          kubectl: '1.17.1'
+          kubectl: '1.20.0'
         id: setup
-      - name: Build and deploy to cluster
-        run: skaffold run
+      - name: Run Skaffold
+        uses: hiberbee/github-action-skaffold@latest
+        with:
+          command: run
