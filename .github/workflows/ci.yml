@@ -14,13 +14,7 @@ jobs:
         with:
           kubectl: '1.20.0'
         id: setup
-      - name: Install skaffold
-        uses: daisaru11/setup-cd-tools@v1
+      - name: Run Skaffold pipeline
+        uses: hiberbee/github-action-skaffold@latest
         with:
-          skaffold: '1.20.0'
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-      - name: Run skaffold
-        run: |
-          skaffold config set default-repo tarrynn/rails-skaffold
-          skaffold run
+          command: run
