@@ -56,8 +56,6 @@ spec:
           value: postgres
         - name: POSTGRES_PASSWORD
           value: postgres
-        - name: POSTGRES_DB
-          value: development
         ports:
         - containerPort: 5432
 ---
@@ -74,3 +72,20 @@ spec:
     protocol: TCP
     port: 5432
     targetPort: 5432
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-setup
+spec:
+  template:
+    spec:
+      containers:
+      - name: db-setup
+        image: rails-skaffold
+        command: ["/bin/sh","-c"]
+        args:
+        - bundle exec rake db:create;
+          bundle exec rake db:migrate;
+      restartPolicy: Never
+  backoffLimit: 4
