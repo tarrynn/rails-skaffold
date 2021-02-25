@@ -83,10 +83,27 @@ spec:
       containers:
       - name: db-setup
         image: rails-skaffold
-        command: ["/bin/sh","-c"]
+        command: ["/bin/sh", "-c"]
         args:
         - sleep 5;
           bundle exec rake db:create;
           bundle exec rake db:migrate;
+      restartPolicy: Never
+  backoffLimit: 4
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: tests
+spec:
+  template:
+    spec:
+      containers:
+      - name: tests
+        image: rails-skaffold
+        command: ["/bin/sh", "-c"]
+        args:
+        - sleep 5;
+          bundle exec rspec;
       restartPolicy: Never
   backoffLimit: 4

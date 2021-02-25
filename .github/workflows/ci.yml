@@ -21,4 +21,6 @@ jobs:
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
       - name: Run skaffold
-        run: skaffold run
+        run: |
+          skaffold config set default-repo tarrynn/rails-skaffold
+          skaffold run
