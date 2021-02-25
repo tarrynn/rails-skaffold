@@ -18,3 +18,5 @@ jobs:
         uses: hiberbee/github-action-skaffold@latest
         with:
           command: run
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
