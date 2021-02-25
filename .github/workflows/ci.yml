@@ -1,22 +1,23 @@
-name: CI using Skaffold
+name: Ruby CI
 
 on: push
 
 jobs:
-  deploy:
-    name: Deploy
+  test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby_version: [2.6.x, 2.7.x]
+
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-      - name: Install kubectl
-        uses: yokawasa/action-setup-kube-tools@v0.3.0
-        with:
-          kubectl: '1.20.0'
-        id: setup
-      - name: Run Skaffold pipeline
-        uses: hiberbee/github-action-skaffold@latest
-        with:
-          command: run
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby_version }}
+    - name: Install bundler
+      run: gem install bundler -v 2.2.6
+    - name: Install dependencies with bundler
+      run: bundle install
+    - name: Run tests
+      run: bundle exec rspec
