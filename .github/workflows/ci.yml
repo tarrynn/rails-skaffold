@@ -21,3 +21,17 @@ jobs:
       run: bundle install
     - name: Run tests
       run: bundle exec rspec
+    - name: Install kubectl
+      uses: yokawasa/action-setup-kube-tools@v0.3.0
+      with:
+        kubectl: '1.20.0'
+      id: setup
+    - name: Install skaffold
+      uses: daisaru11/setup-cd-tools@v1
+      with:
+        skaffold: '1.20.0'
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+    - name: Run skaffold build
+      run: |
+        skaffold build
