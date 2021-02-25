@@ -33,3 +33,44 @@ spec:
       # Optional field
       # By default and for convenience, the Kubernetes control plane will allocate a port from a range (default: 30000-32767)
       nodePort: 32222
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-skaffold
+spec:
+  selector:
+    matchLabels:
+      app: postgres-skaffold
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgres-skaffold
+    spec:
+      containers:
+      - name: postgres-skaffold
+        image: postgres:9.6.18
+        env:
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: postgres
+        - name: POSTGRES_DB
+          value: development
+        ports:
+        - containerPort: 5432
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+spec:
+  type: ClusterIP
+  selector:
+    app: postgres-skaffold
+  ports:
+  - name: postgres
+    protocol: TCP
+    port: 5432
+    targetPort: 5432
