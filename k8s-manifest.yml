@@ -85,7 +85,8 @@ spec:
         image: rails-skaffold
         command: ["/bin/sh","-c"]
         args:
-        - bundle exec rake db:create;
+        - sleep 5;
+          bundle exec rake db:create;
           bundle exec rake db:migrate;
       restartPolicy: Never
   backoffLimit: 4
