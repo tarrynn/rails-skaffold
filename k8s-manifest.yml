@@ -89,7 +89,7 @@ spec:
           bundle exec rake db:create;
           bundle exec rake db:migrate;
       restartPolicy: Never
-  backoffLimit: 4
+  backoffLimit: 2
 ---
 apiVersion: batch/v1
 kind: Job
@@ -106,4 +106,4 @@ spec:
         - sleep 5;
           bundle exec rspec;
       restartPolicy: Never
-  backoffLimit: 4
+  backoffLimit: 2
